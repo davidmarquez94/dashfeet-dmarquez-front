@@ -1,0 +1,87 @@
+
+<div class="container" id="search-form" *ngIf="this.show_form">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearchShipment(searchForm.value)">
+                <div class="mb-3">
+                    <label for="code" class="form-label">Código de pedido</label>
+                    <input type="text" class="form-control" id="code" placeholder="55555" formControlName="code">
+                </div>
+                <div class="mb-3">
+                    <span class="badge text-bg-danger" *ngIf="code && code.invalid && code.touched">Este campo no es válido</span>
+                </div>
+                <div class="mb-3">
+                    <label for="document_type" class="form-label">Tipo de documento</label>
+                    <select class="form-control" id="document_type" formControlName="document_type">
+                        <option>Seleccione</option>
+                        <option value="CC">Cédula de ciudadanía</option>
+                        <option value="NIT">NIT</option>
+                        <option value="PN">Pasaporte Nacional</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <span class="badge text-bg-danger" *ngIf="document_type && document_type.invalid && document_type.touched">Este campo no es válido</span>
+                </div>
+                <div class="mb-3">
+                    <label for="document" class="form-label">Documento de identidad</label>
+                    <input type="text" class="form-control" id="document" placeholder="10101010" formControlName="document">
+                </div>
+                <div class="mb-3">
+                    <span class="badge text-bg-danger" *ngIf="document && document.invalid && document.touched">Este campo no es válido</span>
+                </div>
+                <div class="mb-3">
+                    <button [disabled]="searchForm.invalid" type="submit" class="btn btn-primary">
+                        Consultar
+                    </button>
+                </div>
+            </form>
+            <div class="errors"></div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+<div class="container" *ngIf="this.show_info">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                  <h5 class="card-title">Código del pedido: {{ this.shipment_data[0]['id'] }} </h5>
+                  <p class="text-center">Cliente: {{ this.shipment_data[0]['client']['name'] }}</p>
+                  <p class="text-center">Dirección de entrega: {{ this.shipment_data[0]['delivery_address'] }}</p>
+                  <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <tr *ngFor="let product of this.shipment_data[0]['products']">
+                                <th scope="row">{{ product['active']['name'] }}</th>
+                                <td>{{ product['active']['description'] }}</td>
+                                <td>{{ product['quantity'] }}</td>
+                            </tr>
+                        </tbody>
+                  </table>
+                  <p class="text-center">Estado del pedido: {{ this.shipment_data[0]['status'] }}</p>
+                  <p class="text-center">Fecha estimada de entrega: {{ this.shipment_data[0]['delivery_date'] }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-secondary" (click)="refreshPage()">
+                    Nueva consulta
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-danger" (click)="exitApp()">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
